@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ver"
-        android:id="@+id/buttonView"
+        android:id="@+id/btnViewDownloadedPhoto"
         android:layout_alignTop="@+id/buttonDownload"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

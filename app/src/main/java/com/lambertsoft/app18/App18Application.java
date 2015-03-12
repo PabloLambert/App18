@@ -3,6 +3,7 @@ package com.lambertsoft.app18;
 import android.app.Application;
 
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseCrashReporting;
 import com.parse.ParseUser;
 
@@ -24,7 +25,7 @@ public class App18Application extends Application {
         // Add your initialization code here
         Parse.initialize(this, "Cfw3CXG4HCeFhW03AiYFpplJYYH0V4nnZlzkPCFX", "Y9yq6bVaDvlBHCliVhk6OPQXb7OAklpiR3JDSIYb");
 
-
+        ParseACL.setDefaultACL(new ParseACL(), true);
         //ParseUser.enableAutomaticUser();
         //ParseUser.getCurrentUser().saveInBackground();
 

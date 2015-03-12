@@ -2,6 +2,7 @@ package com.lambertsoft.app18;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -29,9 +31,11 @@ public class PhotoActivity extends ActionBarActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_PHOTO_SELECTED = 2;
 
-    Button btnTakePicture, btnDisk, btnUpload, btnDownload, btnView, btnLogout;
+    Button btnTakePicture, btnDisk, btnUpload, btnDownload, btnLogout, btnViewDownloadedPhoto;
     ImageView imageView;
     Bitmap bitmap;
+    List<ParseObject> downloadedParseObject;
+    int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +45,8 @@ public class PhotoActivity extends ActionBarActivity {
         btnDisk = (Button) findViewById(R.id.buttonDisk);
         btnUpload = (Button) findViewById(R.id.buttonUpload);
         btnDownload = (Button) findViewById(R.id.buttonDownload);
-        btnView = (Button) findViewById(R.id.buttonView);
         btnLogout = (Button) findViewById(R.id.btnLogout);
+        btnViewDownloadedPhoto = (Button) findViewById(R.id.btnViewDownloadedPhoto);
 
         imageView = (ImageView) findViewById(R.id.imageView);
 
@@ -95,6 +99,7 @@ public class PhotoActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
+                downloadedParseObject = null;
                 ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
                 query.whereExists("Name");
                 query.findInBackground(new FindCallback<ParseObject>() {
@@ -102,6 +107,7 @@ public class PhotoActivity extends ActionBarActivity {
                     public void done(List<ParseObject> parseObjects, ParseException e) {
                         if (e == null ) {
                             Toast.makeText(getApplicationContext(), "Total number is:" + parseObjects.size(), Toast.LENGTH_SHORT).show();
+                            downloadedParseObject = parseObjects;
                         } else
                             Log.e("MainActivity", e.toString());
                     }
@@ -115,6 +121,28 @@ public class PhotoActivity extends ActionBarActivity {
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 currentUser.logOut();
                 finish();
+            }
+        });
+
+        btnViewDownloadedPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (downloadedParseObject != null) {
+                    if (counter >= downloadedParseObject.size()) counter = 0;
+                    ParseObject currentPhoto = downloadedParseObject.get(counter);
+                    counter++;
+                    ParseFile file = (ParseFile) currentPhoto.get("file");
+                    file.getDataInBackground(new GetDataCallback() {
+                        @Override
+                        public void done(byte[] bytes, ParseException e) {
+                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            imageView.setImageBitmap(bmp);
+
+                        }
+                    });
+
+
+                }
             }
         });
 
