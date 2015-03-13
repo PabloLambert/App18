@@ -3,6 +3,8 @@ package com.lambertsoft.app18;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -29,7 +31,7 @@ import java.util.List;
 public class PhotoActivity extends ActionBarActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_PHOTO_SELECTED = 2;
+    static final int REQUEST_SELECT_FILE = 2;
 
     Button btnTakePicture, btnDisk, btnUpload, btnDownload, btnLogout, btnViewDownloadedPhoto;
     ImageView imageView;
@@ -67,7 +69,9 @@ public class PhotoActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(intent, REQUEST_PHOTO_SELECTED);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(intent, REQUEST_SELECT_FILE);
+                }
             }
         });
 
@@ -76,21 +80,28 @@ public class PhotoActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                // Convert it to byte
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                // Compress image to lower quality scale 1 - 100
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] image = stream.toByteArray();
+                if ( bitmap != null ) {
+                    // Convert it to byte
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    // Compress image to lower quality scale 1 - 100
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] image = stream.toByteArray();
 
-                // Create the ParseFile
-                ParseFile file = new ParseFile("androidbegin.png", image);
-                // Upload the image into Parse Cloud
-                file.saveInBackground();
+                    // Create the ParseFile
+                    ParseFile file = new ParseFile("androidbegin.png", image);
+                    // Upload the image into Parse Cloud
+                    file.saveInBackground();
 
-                ParseObject photo = new ParseObject("Photo");
-                photo.put("Name", "Fotografía");
-                photo.put("file", file);
-                photo.saveInBackground();
+                    ParseObject photo = new ParseObject("Photo");
+                    photo.put("Name", "Fotografía");
+                    photo.put("file", file);
+                    photo.saveInBackground();
+                    Toast.makeText(getApplicationContext(), "Subiendo imagen...", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "No hay imagen para subir", Toast.LENGTH_SHORT).show();
+
+                }
 
             }
         });
@@ -105,7 +116,7 @@ public class PhotoActivity extends ActionBarActivity {
                 query.findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> parseObjects, ParseException e) {
-                        if (e == null ) {
+                        if (e == null) {
                             Toast.makeText(getApplicationContext(), "Total number is:" + parseObjects.size(), Toast.LENGTH_SHORT).show();
                             downloadedParseObject = parseObjects;
                         } else
@@ -156,9 +167,9 @@ public class PhotoActivity extends ActionBarActivity {
             bitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(bitmap);
         }
-        if (requestCode == REQUEST_PHOTO_SELECTED && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            bitmap = (Bitmap) extras.get("data");
+        if (requestCode == REQUEST_SELECT_FILE && resultCode == RESULT_OK) {
+
+            bitmap = data.getParcelableExtra("data");
             imageView.setImageBitmap(bitmap);
         }
     }
