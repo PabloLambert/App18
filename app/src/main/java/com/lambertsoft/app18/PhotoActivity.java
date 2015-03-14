@@ -1,6 +1,7 @@
 package com.lambertsoft.app18;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -67,11 +68,16 @@ public class PhotoActivity extends ActionBarActivity {
         btnDisk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, REQUEST_SELECT_FILE);
+                /*
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(intent, REQUEST_SELECT_FILE);
                 }
+                */
             }
         });
 
@@ -169,7 +175,21 @@ public class PhotoActivity extends ActionBarActivity {
         }
         if (requestCode == REQUEST_SELECT_FILE && resultCode == RESULT_OK) {
 
-            bitmap = data.getParcelableExtra("data");
+            Uri selectedImage = data.getData();
+            if (selectedImage == null ) {
+                Log.d("Photo", "No data selected..");
+                return;
+            }
+            String[] filePathColumn = { MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int colunmIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(colunmIndex);
+            cursor.close();
+
+            bitmap = BitmapFactory.decodeFile(picturePath);
             imageView.setImageBitmap(bitmap);
         }
     }
