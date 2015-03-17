@@ -216,4 +216,5 @@ public class PhotoActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
 }

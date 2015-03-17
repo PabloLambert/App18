@@ -32,12 +32,28 @@ public class MainActivity extends ActionBarActivity {
             btnLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        ParseLoginBuilder loginBuilder = new ParseLoginBuilder(
-                                MainActivity.this);
+
+                    currentUser = ParseUser.getCurrentUser();
+                    if (currentUser != null && currentUser.getUsername() != null ) {
+
+                        Intent intent = new Intent(getApplicationContext(), PhotoActivity.class);
+                        startActivity(intent);
+                    } else {
+
+                        ParseLoginBuilder loginBuilder = new ParseLoginBuilder(MainActivity.this);
                         startActivityForResult(loginBuilder.build(), LOGIN_REQUEST);
+                    }
                 }
             });
         }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data ) {
+        if (requestCode == LOGIN_REQUEST && resultCode == RESULT_OK) {
+            Intent intent = new Intent(getApplicationContext(), PhotoActivity.class);
+            startActivity(intent);
+        }
+    }
 
         @Override
         protected void onResume() {
@@ -45,9 +61,9 @@ public class MainActivity extends ActionBarActivity {
 
             currentUser = ParseUser.getCurrentUser();
             if (currentUser != null && currentUser.getUsername() != null ) {
-                Log.d("Main", currentUser.getUsername());
-                Intent intent = new Intent(this, PhotoActivity.class);
-                startActivity(intent);
+                btnLogin.setText("Go");
+            } else {
+                btnLogin.setText("Login");
             }
         }
 
