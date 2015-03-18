@@ -34,7 +34,7 @@ public class PhotoActivity extends ActionBarActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_SELECT_FILE = 2;
 
-    Button btnTakePicture, btnDisk, btnUpload, btnDownload, btnLogout, btnViewDownloadedPhoto;
+    Button btnTakePicture, btnDisk, btnUpload, btnDownload, btnLogout, btnViewDownloadedPhoto,btnGeo;
     ImageView imageView;
     Bitmap bitmap;
     List<ParseObject> downloadedParseObject;
@@ -49,6 +49,7 @@ public class PhotoActivity extends ActionBarActivity {
         btnUpload = (Button) findViewById(R.id.buttonUpload);
         btnDownload = (Button) findViewById(R.id.buttonDownload);
         btnLogout = (Button) findViewById(R.id.btnLogout);
+        btnGeo = (Button) findViewById(R.id.btnGeo);
         btnViewDownloadedPhoto = (Button) findViewById(R.id.btnViewDownloadedPhoto);
 
         imageView = (ImageView) findViewById(R.id.imageView);
@@ -163,6 +164,14 @@ public class PhotoActivity extends ActionBarActivity {
             }
         });
 
+        btnGeo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), GeoActivity.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
 

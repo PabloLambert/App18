@@ -71,4 +71,13 @@
         android:layout_alignLeft="@+id/imageView"
         android:layout_alignStart="@+id/imageView" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Geo"
+        android:id="@+id/btnGeo"
+        android:layout_alignTop="@+id/buttonDownload"
+        android:layout_alignRight="@+id/buttonTakePicture"
+        android:layout_alignEnd="@+id/buttonTakePicture" />
+
 </RelativeLayout>

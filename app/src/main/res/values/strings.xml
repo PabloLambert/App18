@@ -9,5 +9,6 @@
     <string name="profile_title_logged_in">Ingresar</string>
     <string name="profile_login_button_label">Login</string>
     <string name="profile_title_logged_out">Salir</string>
+    <string name="title_activity_geo">Map</string>
 
 </resources>
