@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -34,7 +33,7 @@ public class PhotoActivity extends ActionBarActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_SELECT_FILE = 2;
 
-    Button btnTakePicture, btnDisk, btnUpload, btnDownload, btnLogout, btnViewDownloadedPhoto,btnGeo;
+    Button btnTakePicture, btnDisk, btnUpload, btnDownload, btnLogout, btnViewDownloadedPhoto,btnGeo, btnStudent;
     ImageView imageView;
     Bitmap bitmap;
     List<ParseObject> downloadedParseObject;
@@ -44,13 +43,14 @@ public class PhotoActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-        btnTakePicture = (Button) findViewById(R.id.buttonTakePicture);
+        btnTakePicture = (Button) findViewById(R.id.btnTakePicture);
         btnDisk = (Button) findViewById(R.id.buttonDisk);
         btnUpload = (Button) findViewById(R.id.buttonUpload);
         btnDownload = (Button) findViewById(R.id.buttonDownload);
         btnLogout = (Button) findViewById(R.id.btnLogout);
         btnGeo = (Button) findViewById(R.id.btnGeo);
         btnViewDownloadedPhoto = (Button) findViewById(R.id.btnViewDownloadedPhoto);
+        btnStudent = (Button)findViewById(R.id.btnStudent);
 
         imageView = (ImageView) findViewById(R.id.imageView);
 
@@ -168,6 +168,15 @@ public class PhotoActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), GeoActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        btnStudent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
                 startActivity(intent);
 
             }

@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sacar Foto"
-        android:id="@+id/buttonTakePicture"
+        android:id="@+id/btnTakePicture"
         android:layout_above="@+id/imageView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="Ver Disco"
         android:id="@+id/buttonDisk"
-        android:layout_alignTop="@+id/buttonTakePicture"
+        android:layout_alignTop="@+id/btnTakePicture"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -77,7 +77,16 @@
         android:text="Geo"
         android:id="@+id/btnGeo"
         android:layout_alignTop="@+id/buttonDownload"
-        android:layout_alignRight="@+id/buttonTakePicture"
-        android:layout_alignEnd="@+id/buttonTakePicture" />
+        android:layout_alignRight="@+id/btnTakePicture"
+        android:layout_alignEnd="@+id/btnTakePicture" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Student"
+        android:id="@+id/btnStudent"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/buttonDisk"
+        android:layout_toEndOf="@+id/buttonDisk" />
 
 </RelativeLayout>
